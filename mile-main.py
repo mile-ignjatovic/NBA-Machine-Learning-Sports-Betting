@@ -21,7 +21,7 @@ data_url = 'https://stats.nba.com/stats/leaguedashteamstats?' \
 
 def createTodaysGames(games, df, odds):
     match_data = []
-    todays_games_uo = []
+    # todays_games_uo = []
     home_team_odds = []
     away_team_odds = []
 
@@ -32,13 +32,13 @@ def createTodaysGames(games, df, odds):
             continue
         if odds is not None:
             game_odds = odds[home_team + ':' + away_team]
-            todays_games_uo.append(game_odds['under_over_odds'])
+            # todays_games_uo.append(game_odds['under_over_odds'])
             
             home_team_odds.append(game_odds[home_team]['money_line_odds'])
             away_team_odds.append(game_odds[away_team]['money_line_odds'])
 
         else:
-            todays_games_uo.append(input(home_team + ' vs ' + away_team + ': '))
+            # todays_games_uo.append(input(home_team + ' vs ' + away_team + ': '))
 
             home_team_odds.append(input(home_team + ' odds: '))
             away_team_odds.append(input(away_team + ' odds: '))
@@ -55,7 +55,7 @@ def createTodaysGames(games, df, odds):
     data = frame_ml.values
     data = data.astype(float)
 
-    return data, todays_games_uo, frame_ml, home_team_odds, away_team_odds
+    return data, home_team_odds, away_team_odds
 
 
 def main():
