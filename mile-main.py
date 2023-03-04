@@ -81,7 +81,7 @@ def main():
     data = tf.keras.utils.normalize(data, axis=1)
     nn_prediction = NN_Runner_mile.nn_runner(data, games, home_team_odds, away_team_odds)
     predictions_dict['nn'] = nn_prediction
-    return predictions_dict
+    print(predictions_dict) 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Model to Run')

@@ -42,3 +42,4 @@ def xgb_runner(data, games, home_team_odds, away_team_odds):
         count += 1
 
     deinit()
+    return predicted_results
