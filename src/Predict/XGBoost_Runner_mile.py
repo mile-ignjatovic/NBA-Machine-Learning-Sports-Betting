@@ -32,8 +32,8 @@ def xgb_runner(data, games, home_team_odds, away_team_odds):
         predicted_result = {}
         predicted_result['home_team'] = home_team
         predicted_result['away_team'] = away_team
-        predicted_result['winner'] = winner
-        predicted_result['winner_confidence'] = winner_confidence
+        predicted_result['winner'] = str(winner)
+        predicted_result['winner_confidence'] = str(winner_confidence)
         predicted_result['ev_home'] = str(ev_home)
         predicted_result['ev_away'] = str(ev_away)
 

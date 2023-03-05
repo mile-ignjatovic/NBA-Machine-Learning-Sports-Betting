@@ -6,7 +6,8 @@ from src.Predict import NN_Runner_mile, XGBoost_Runner_mile
 from src.Utils.Dictionaries import team_index_current
 from src.Utils.tools import create_todays_games_from_odds, get_json_data, to_data_frame, get_todays_games_json, create_todays_games
 from src.DataProviders.SbrOddsProvider import SbrOddsProvider
-
+from src.api import Firebase_API
+import json
 
 todays_games_url = 'https://data.nba.com/data/10s/v2015/json/mobile_teams/nba/2022/scores/00_todays_scores.json'
 data_url = 'https://stats.nba.com/stats/leaguedashteamstats?' \
@@ -57,8 +58,11 @@ def createTodaysGames(games, df, odds):
 
     return data, home_team_odds, away_team_odds
 
-
 def main():
+    firebase_api = Firebase_API
+    firebase_api.init()
+    firebase_api.test_db_connection()
+
     odds = None
     if args.odds:
         odds = SbrOddsProvider(sportsbook=args.odds).get_odds()
@@ -75,13 +79,15 @@ def main():
     data, home_team_odds, away_team_odds = createTodaysGames(games, df, odds)
     
     predictions_dict = {}
-    XGBoost_prediction = XGBoost_Runner_mile.xgb_runner(data, games, home_team_odds, away_team_odds)
-    predictions_dict['xgboost'] = XGBoost_prediction
+    XGBoost_predictions = XGBoost_Runner_mile.xgb_runner(data, games, home_team_odds, away_team_odds)
+    predictions_dict['xgboost'] = XGBoost_predictions
     
     data = tf.keras.utils.normalize(data, axis=1)
-    nn_prediction = NN_Runner_mile.nn_runner(data, games, home_team_odds, away_team_odds)
-    predictions_dict['nn'] = nn_prediction
-    print(predictions_dict) 
+    nn_predictions = NN_Runner_mile.nn_runner(data, games, home_team_odds, away_team_odds)
+    predictions_dict['nn'] = nn_predictions
+    
+    json_string = json.dumps(predictions_dict)
+    Firebase_API.push_predicition(json_string)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Model to Run')
